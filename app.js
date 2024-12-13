@@ -1,17 +1,35 @@
 const express = require("express");
-const cors = require("cors");
+const path = require("path");
+
+const { open } = require("sqlite");
+const sqlite3 = require("sqlite3");
 const app = express();
-app.use(cors());
 
+const dbPath = path.join(__dirname, "goodreads.db");
 
-app.listen(4000, () => console.log(`Server Running At http://localhost:4000`));
+let db = null;
+
+const initializeDBAndServer = async () => {
+  try {
+    db = await open({
+      filename: dbPath,
+      driver: sqlite3.Database,
+    });
+    app.listen(4000, () => {
+      console.log("Server Running at http://localhost:4000/");
+    });
+  } catch (e) {
+    console.log(`DB Error: ${e.message}`);
+    process.exit(1);
+  }
+};
 
 app.get("/",async(request,response)=>{
-    response.send("Hello");
+    response.send("New Testing");
 })
 
-app.get("/hello",async(request,respose)=>{
-    respose.send("New");
+app.get("/new",async(request,response)=>{
+    response.send("Otre Resting");
 })
 
-module.exports = app;
+initializeDBAndServer();
