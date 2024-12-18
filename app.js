@@ -57,7 +57,7 @@ app.post("/register/", async (request, response) => {
     response.send({response_msg:`Created new user with ${newUserId}`});
   } else {
     response.status = 400;
-    response.send({error_msg:"User already exists");
+    response.send({error_msg:"User already exists"});
   }
 });
 
