@@ -54,10 +54,9 @@ app.post("/register/", async (request, response) => {
           )`;
     const dbResponse = await db.run(createUserQuery);
     const newUserId = dbResponse.lastID;
-    response.send({response_msg:`Created new user with ${newUserId}`});
+    response.status(200).send({response_msg:`Created new user with ${newUserId}`});
   } else {
-    response.status = 400;
-    response.send({error_msg:"User already exists"});
+    response.status(400).send({error_msg:"User already exists"});
   }
 });
 
@@ -66,8 +65,7 @@ app.post("/login", async (request, response) => {
     const selectUserQuery = `SELECT * FROM user WHERE email = '${email}'`;
     const dbUser = await db.get(selectUserQuery);
     if (dbUser === undefined) {
-      response.status(400);
-      response.send("Invalid User");
+      response.status(400).send({error_msg:"Invalid User"});
     } else {
       const isPasswordMatched = await bcrypt.compare(password, dbUser.password);
       if (isPasswordMatched === true) {
@@ -77,8 +75,7 @@ app.post("/login", async (request, response) => {
         const jwtToken = jwt.sign(payload, "KARTHIK");
         response.send({ jwtToken });
       } else {
-        response.status(400);
-        response.send("Invalid Password");
+        response.status(400).send({error_msg:"Invalid Password"});
       }
     }
   });
