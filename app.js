@@ -54,7 +54,7 @@ app.post("/register/", async (request, response) => {
           )`;
     const dbResponse = await db.run(createUserQuery);
     const newUserId = dbResponse.lastID;
-    response.send({response_msg:`Created new user with ${newUserId}`);
+    response.send({response_msg:`Created new user with ${newUserId}`});
   } else {
     response.status = 400;
     response.send({error_msg:"User already exists");
